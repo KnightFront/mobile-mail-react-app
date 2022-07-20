@@ -1,7 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const webpack = require('webpack');
+const WebpackBar = require('webpackbar');
 
 module.exports = {
   entry: {
@@ -23,7 +25,19 @@ module.exports = {
         removeComments: true,
       },
     }),
-    new ESLintPlugin()
+    new ESLintPlugin(),
+    new FriendlyErrorsWebpackPlugin(),
+    new webpack.ProgressPlugin({
+      activeModules: false,
+      entries: true,
+      modules: true,
+      modulesCount: 5000,
+      profile: false,
+      dependencies: true,
+      dependenciesCount: 10000,
+      percentBy: 'entries',
+    }),
+    new WebpackBar(),
   ],
   resolve: {
     alias: {
@@ -74,4 +88,10 @@ module.exports = {
       },
     },
   },
+  stats: {
+    modules: false,
+    children: false,
+    chunks: false,
+    chunkModules: false,
+  }
 };
